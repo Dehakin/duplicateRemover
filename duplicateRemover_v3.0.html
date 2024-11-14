@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <script defer>
+    function cutDown() {
+        const text = document.getElementById("inputArea").value.split("\n");
+
+        const alphabetize = document.getElementById("alpha").checked;
+        const capitalizationMatters = document.getElementById("capital").checked;
+        // console.log(textToCut[0]);
+        // console.log(textToCut);
+        // console.log(typeof(textToCut));
+    
+        // Trim whitespace
+        for (let i = 0; i < text.length; ++i) {
+            text[i] = text[i].trim();
+        }
+    
+        if (text.length === 0) return;
+    
+        // default behavior: caps matter, no alpha
+        const uniqueWords = new Set();
+        const duplicates = [];
+
+        for (const originalWord of text) {
+            let modifiedWord = originalWord;
+            if (!capitalizationMatters) modifiedWord = modifiedWord.toLowerCase();
+            if (uniqueWords.has(modifiedWord)) {
+                // this word is a duplicate. add to duplicates.
+                duplicates.push(originalWord);
+            }
+            else {
+                uniqueWords.add(modifiedWord);
+            }
+        }
+
+    
+        // Make text for output area
+        let returnString = "";
+        uniqueWords.forEach((word) => {
+            returnString += word + "\n";
+        });
+        document.getElementById("outputArea").value = returnString;
+
+        // Make text for duplicates area
+        returnString = "";
+        for (const value of duplicates) {
+            returnString += value + "\n";
+        }
+        document.getElementById("duplicatesArea").value = returnString;
+        //console.log(uniqueWords);
+    }
+    
+    // Simple random number generator
+    function getRandomInt(min, max) {
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+        return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+    }
+    
+        
+    // Clear boxes of text
+    function clearBoxes() {
+        document.getElementById("inputArea").value = "";
+        document.getElementById("outputArea").value = "";
+    }
+    </script>
+    <style>
+        #inputArea {
+            border : yellow solid;
+         
+        }
+
+        #outputArea {
+            border : black solid;
+        }
+
+        #duplicatesArea {
+            border : blue solid;
+        }
+
+        #title {
+            padding-left: 100px;
+        }
+    </style>
+
+<h1 id="title">Duplicate Killer</h1>
+<h3>By yours truly, the Great Zach</h3>
+<body>
+    <textarea id="inputArea" rows="50" cols="33""></textarea>
+    <textarea id="outputArea" rows="50" cols="33"></textarea>
+    <textarea id="duplicatesArea" rows="50" cols="33"></textarea>
+    <br />
+    <button id="cutdown" class="but" onclick="cutDown()">Click me to remove duplicates!</button>
+    <button id="clear" class="but" onclick="clearBoxes()">Click me to clear everything</button>
+    <p>Alphabetized?</p>
+    <input type="checkbox" class="check" id="alpha" />
+    <p>Capitalization matters?</p>
+    <input type="checkbox" class="check" id="capital" />
+</body>
+</html>
