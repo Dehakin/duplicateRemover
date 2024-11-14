@@ -4,7 +4,7 @@
     function cutDown() {
         const text = document.getElementById("inputArea").value.split("\n");
 
-        const alphabetize = document.getElementById("alpha").checked;
+        //const alphabetize = document.getElementById("alpha").checked;
         const capitalizationMatters = document.getElementById("capital").checked;
         // console.log(textToCut[0]);
         // console.log(textToCut);
@@ -92,8 +92,8 @@
     <br />
     <button id="cutdown" class="but" onclick="cutDown()">Click me to remove duplicates!</button>
     <button id="clear" class="but" onclick="clearBoxes()">Click me to clear everything</button>
-    <p>Alphabetized?</p>
-    <input type="checkbox" class="check" id="alpha" />
+    <!-- <p>Alphabetized?</p>
+    <input type="checkbox" class="check" id="alpha" /> -->
     <p>Capitalization matters?</p>
     <input type="checkbox" class="check" id="capital" />
 </body>
