@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+    <script defer>
+    function cutDown() {
+        const text = document.getElementById("inputArea").value.split("\n");
+        // console.log(textToCut[0]);
+        // console.log(textToCut);
+        // console.log(typeof(textToCut));
+    
+        // Trim whitespace
+        for (let i = 0; i < text.length; ++i) {
+            text[i] = text[i].trim();
+        }
+    
+        if (text.length === 0) return;
+    
+        const uniqueWords = [];
+        const wordsWithDuplicates = new Set();
+    
+        // Compare lowercase of new words to uniqueWords
+        // don't add if it already exists
+        for (const value of text) {
+            let foundWord = false;
+            for (const savedValue of uniqueWords) {
+                if (value.toLowerCase() === savedValue.toLowerCase()) {
+                    foundWord = true;
+                    break;
+                }
+            }
+            if (!foundWord) {
+                uniqueWords.push(value);
+            }
+            else {
+                wordsWithDuplicates.add(value);
+            }
+        }
+    
+        // Make text for output area
+        let returnString = "";
+        uniqueWords.forEach((word) => {
+            returnString += word + "\n";
+        });
+    
+        document.getElementById("outputArea").value = returnString;
+
+        returnString = "";
+        for (const value of wordsWithDuplicates) {
+            returnString += value + "\n";
+        }
+
+        document.getElementById("duplicatesArea").value = returnString;
+        //console.log(uniqueWords);
+    }
+    
+    // Simple random number generator
+    function getRandomInt(min, max) {
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+        return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+    }
+    
+        
+    // Clear boxes of text
+    function clearBoxes() {
+        document.getElementById("inputArea").value = "";
+        document.getElementById("outputArea").value = "";
+    }
+    </script>
+    <style>
+        #inputArea {
+            border : yellow solid;
+         
+        }
+
+        #outputArea {
+            border : black solid;
+        }
+
+        #duplicatesArea {
+            border : blue solid;
+        }
+
+        #title {
+            padding-left: 100px;
+        }
+    </style>
+
+<h1 id="title">Duplicate Killer</h1>
+<h3>By yours truly, the Great Zach</h3>
+<ol>It is NOT case sensitive, but it will keep the spelling of the first word:</ol>
+<ol>If you type "vader" and "Vader", it'll remove the "Vader" even though it's the correct spelling!</ol>
+<body>
+    <textarea id="inputArea" rows="50" cols="33""></textarea>
+    <textarea id="outputArea" rows="50" cols="33"></textarea>
+    <textarea id="duplicatesArea" rows="50" cols="33"></textarea>
+    <button id="cutdown" class="but" onclick="cutDown()">Click me to remove duplicates!</button>
+    <button id="clear" class="but" onclick="clearBoxes()">Click me to clear everything</button>
+</body>
+</html>
