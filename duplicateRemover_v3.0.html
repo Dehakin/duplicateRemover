@@ -1,68 +1,121 @@
 <!DOCTYPE html>
 <html>
     <script defer>
-    function cutDown() {
-        const text = document.getElementById("inputArea").value.split("\n");
+        let allowClearing = false;
+        let alphabetize = true;
+        let capSensitive = false;
 
-        //const alphabetize = document.getElementById("alpha").checked;
-        const capitalizationMatters = document.getElementById("capital").checked;
-        // console.log(textToCut[0]);
-        // console.log(textToCut);
-        // console.log(typeof(textToCut));
-    
-        // Trim whitespace
-        for (let i = 0; i < text.length; ++i) {
-            text[i] = text[i].trim();
+        function cutDown() {
+            const text = document.getElementById("inputArea").value.split("\n");
+            // console.log(textToCut[0]);
+            // console.log(textToCut);
+            // console.log(typeof(textToCut));
+        
+            // Trim whitespace
+            for (let i = 0; i < text.length; ++i) {
+                text[i] = text[i].trim();
+            }
+        
+            if (text.length === 0) return;
+        
+            const uniqueWords = [];
+            const wordsWithDuplicates = [];
+        
+            // Compare lowercase of new words to uniqueWords
+            // don't add if it already exists
+            for (const value of text) {
+                let foundWord = false;
+                for (const savedValue of uniqueWords) {
+                    if (value.toLowerCase() === savedValue.toLowerCase()) {
+                        foundWord = true;
+                        break;
+                    }
+                }
+                if (!foundWord) {
+                    uniqueWords.push(value);
+                }
+                else {
+                    wordsWithDuplicates.push(value);
+                }
+            }
+
+            if (alphabetize) {
+                uniqueWords.sort();
+                wordsWithDuplicates.sort();
+            }
+        
+            // Make text for output area
+            let returnString = "";
+            uniqueWords.forEach((word) => {
+                returnString += word + "\n";
+            });
+        
+            document.getElementById("outputArea").value = returnString;
+
+            returnString = "";
+            wordsWithDuplicates.forEach((word) => {
+                returnString += word + "\n";
+            });
+
+            document.getElementById("duplicatesArea").value = returnString;
+            //console.log(uniqueWords);
         }
-    
-        if (text.length === 0) return;
-    
-        // default behavior: caps matter, no alpha
-        const uniqueWords = new Set();
-        const duplicates = [];
+        
+        // Simple random number generator
+        function getRandomInt(min, max) {
+            const minCeiled = Math.ceil(min);
+            const maxFloored = Math.floor(max);
+            return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+        }
+        
+            
+        // Clear boxes of text
+        function clearBoxes() {
+            if (allowClearing){
+                document.getElementById("inputArea").value = "";
+                document.getElementById("outputArea").value = "";
+            }
+        }
 
-        for (const originalWord of text) {
-            let modifiedWord = originalWord;
-            if (!capitalizationMatters) modifiedWord = modifiedWord.toLowerCase();
-            if (uniqueWords.has(modifiedWord)) {
-                // this word is a duplicate. add to duplicates.
-                duplicates.push(originalWord);
+        function toggleAlphabetization() {
+            const alpha = document.getElementById("alphabetize");
+            if (alphabetize) {
+                alpha.textContent = "Alphabetization OFF";
             }
             else {
-                uniqueWords.add(modifiedWord);
+                alpha.textContent = "Alphabetization ON";
             }
+            alphabetize = !alphabetize;
         }
 
-    
-        // Make text for output area
-        let returnString = "";
-        uniqueWords.forEach((word) => {
-            returnString += word + "\n";
-        });
-        document.getElementById("outputArea").value = returnString;
-
-        // Make text for duplicates area
-        returnString = "";
-        for (const value of duplicates) {
-            returnString += value + "\n";
+        function toggleCaps() {
+            console.log("hiy");
+            const caps = document.getElementById("caps");
+            if (capSensitive) {
+                caps.textContent = "Cap sensitive OFF";
+            }
+            else {
+                caps.textContent = "Cap sensitive ON";
+            }
+            capSensitive = !capSensitive;
         }
-        document.getElementById("duplicatesArea").value = returnString;
-        //console.log(uniqueWords);
-    }
-    
-    // Simple random number generator
-    function getRandomInt(min, max) {
-        const minCeiled = Math.ceil(min);
-        const maxFloored = Math.floor(max);
-        return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
-    }
-    
+
         
-    // Clear boxes of text
-    function clearBoxes() {
-        document.getElementById("inputArea").value = "";
-        document.getElementById("outputArea").value = "";
-    }
+        function safetyToggle() {
+            const clearButton = document.getElementById("clear");
+            const safetyButton = document.getElementById("safety");
+            if (allowClearing) {
+                console.log("set to invisible");
+                clearButton.style.visibility = "hidden";
+                safetyButton.textContent = "Click to allow clearing.";
+            }
+            else {
+                console.log("set to visible");
+                clearButton.style.visibility = "visible";
+                safetyButton.textContent = "Click to disallow clearing.";
+            }
+            allowClearing = !allowClearing;
+        }
     </script>
     <style>
         #inputArea {
@@ -85,16 +138,16 @@
 
 <h1 id="title">Duplicate Killer</h1>
 <h3>By yours truly, the Great Zach</h3>
+<ol>It is NOT case sensitive, but it will keep the spelling of the first word:</ol>
+<ol>If you type "vader" and "Vader", it'll remove the "Vader" even though it's the correct spelling!</ol>
 <body>
     <textarea id="inputArea" rows="50" cols="33""></textarea>
     <textarea id="outputArea" rows="50" cols="33"></textarea>
     <textarea id="duplicatesArea" rows="50" cols="33"></textarea>
-    <br />
     <button id="cutdown" class="but" onclick="cutDown()">Click me to remove duplicates!</button>
-    <button id="clear" class="but" onclick="clearBoxes()">Click me to clear everything</button>
-    <!-- <p>Alphabetized?</p>
-    <input type="checkbox" class="check" id="alpha" /> -->
-    <p>Capitalization matters?</p>
-    <input type="checkbox" class="check" id="capital" />
+    <button id="clear" class="but" style="visibility: hidden;" onclick="clearBoxes()">Click me to clear everything</button>
+    <button id="safety" onclick="safetyToggle()">Click to allow clearing.</button>
+    <button id="alphabetize" onclick="toggleAlphabetization()">Alphabetization ON</button>
+    <button id="caps" onclick="toggleCaps()">Cap sensitive OFF</button>
 </body>
 </html>
