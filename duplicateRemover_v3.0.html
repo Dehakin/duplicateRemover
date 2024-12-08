@@ -73,15 +73,7 @@
 
             document.getElementById("duplicatesArea").value = returnString;
             //console.log(uniqueWords);
-        }
-        
-        // Simple random number generator
-        function getRandomInt(min, max) {
-            const minCeiled = Math.ceil(min);
-            const maxFloored = Math.floor(max);
-            return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
-        }
-        
+        }    
             
         // Clear boxes of text
         function clearBoxes() {
@@ -129,6 +121,33 @@
             }
             allowClearing = !allowClearing;
         }
+
+        function randomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+
+        function generateRandomWord() {
+            let ret = "";
+            for (let i = 0; i < randomInt(1, 10); ++i) {
+                ret += String.fromCharCode(randomInt(65, 122));
+            }
+
+            return ret;
+        }
+
+        function stressTest() {
+            if (allowClearing) {
+                const textArea = document.getElementById("inputArea");
+                let words = "";
+                for (let i = 0; i < 2000; ++i) {
+                    words += generateRandomWord() + "\n";
+                }
+                textArea.textContent = words;
+            }
+        }
     </script>
     <style>
         #inputArea {
@@ -162,5 +181,6 @@
     <button id="safety" onclick="safetyToggle()">Click to allow clearing.</button>
     <button id="alphabetize" onclick="toggleAlphabetization()">Alphabetization ON</button>
     <button id="caps" onclick="toggleCaps()">Cap sensitive OFF</button>
+    <button id="caps" onclick="stressTest()">Stress test</button>
 </body>
 </html>
