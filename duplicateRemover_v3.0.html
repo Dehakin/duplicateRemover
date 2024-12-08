@@ -152,7 +152,6 @@
     <style>
         #inputArea {
             border : yellow solid;
-         
         }
 
         #outputArea {
@@ -162,16 +161,15 @@
         #duplicatesArea {
             border : blue solid;
         }
-
-        #title {
-            padding-left: 100px;
+        .toptext {
+            text-align: center;
         }
     </style>
 
-<h1 id="title">Duplicate Killer</h1>
-<h3>By yours truly, the Great Zach</h3>
-<ol>It is NOT case sensitive, but it will keep the spelling of the first word:</ol>
-<ol>If you type "vader" and "Vader", it'll remove the "Vader" even though it's the correct spelling!</ol>
+<h1 class="toptext">Duplicate Killer</h1>
+<h3 class="toptext">By yours truly, the Great Zach</h3>
+<ol class="toptext">It is NOT case sensitive, but it will keep the spelling of the first word:</ol>
+<ol class="toptext">If you type "vader" and "Vader", it'll remove the "Vader" even though it's the correct spelling!</ol>
 <body>
     <textarea id="inputArea" rows="50" cols="33""></textarea>
     <textarea id="outputArea" rows="50" cols="33"></textarea>
