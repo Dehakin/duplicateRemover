@@ -128,11 +128,17 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
+        function isAlphanumeric(str) {
+            return /^[a-z0-9]+$/i.test(str);
+        }
+
 
         function generateRandomWord() {
             let ret = "";
             for (let i = 0; i < randomInt(1, 10); ++i) {
-                ret += String.fromCharCode(randomInt(65, 122));
+                let val = String.fromCharCode(randomInt(48, 122));
+                while (!isAlphanumeric(val)) { val = String.fromCharCode(randomInt(48, 122)); }
+                ret += val;
             }
 
             return ret;
@@ -142,9 +148,11 @@
             if (allowClearing) {
                 const textArea = document.getElementById("inputArea");
                 let words = "";
-                for (let i = 0; i < 2000; ++i) {
+                const times = 2000;
+                for (let i = 0; i < times - 1; ++i) {
                     words += generateRandomWord() + "\n";
                 }
+                words += generateRandomWord();
                 textArea.textContent = words;
             }
         }
